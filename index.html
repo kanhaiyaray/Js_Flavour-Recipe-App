@@ -1,99 +1,158 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Food Recipe App</title>
-    <!-- link bootstrap file to use it  -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
-      crossorigin="anonymous"
-    />
-    <!-- LINK CSS FILE   -->
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body class="bg-black text-light">
-    <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-dark mb-4">
-      <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Food Recipe App</span>
-        <div class="d-flex" id="auth-buttons">
-          <button type="button" class="btn btn-outline-light me-2" id="nav-login-btn">Login</button>
-          <button type="button" class="btn btn-primary" id="nav-signup-btn">Sign Up</button>
-        </div>
-        <div class="d-flex d-none" id="user-info">
-          <span class="navbar-text me-3" id="user-greeting"></span>
-          <button type="button" class="btn btn-outline-danger" id="logout-btn">Logout</button>
-        </div>
-      </div>
-    </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Flavour — Food Recipe App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
 
-    <!-- Auth Widget (Dropdown) -->
-    <div id="auth-widget" class="auth-widget-hidden">
-      <div class="auth-container" id="auth-container">
-        <div class="auth-form-container sign-up-container">
-          <form id="signup-form">
-            <h1>Create Account</h1>
-            <input type="text" id="signup-name" placeholder="Name" required autocomplete="name" />
-            <input type="email" id="signup-email" placeholder="Email" required autocomplete="email" />
-            <input type="password" id="signup-password" placeholder="Password" required autocomplete="new-password" />
-            <div class="text-danger mb-3 d-none" id="signup-error" style="font-size: 13px; font-weight: bold; margin-top: 5px;"></div>
-            <button class="auth-btn" type="submit">Sign Up</button>
-          </form>
-        </div>
-        <div class="auth-form-container sign-in-container">
-          <form id="login-form">
-            <h1>Sign In</h1>
-            <input type="email" id="login-email" placeholder="Email" required autocomplete="email" />
-            <input type="password" id="login-password" placeholder="Password" required autocomplete="current-password" />
-            <div class="text-danger mb-3 d-none" id="login-error" style="font-size: 13px; font-weight: bold; margin-top: 5px;"></div>
-            <button class="auth-btn" type="submit">Sign In</button>
-          </form>
-        </div>
-        <div class="overlay-container">
-          <div class="overlay">
-            <div class="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>To keep connected with us please login</p>
-              <button class="auth-btn ghost" id="signIn" type="button">Sign In</button>
-            </div>
-            <div class="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details to join</p>
-              <button class="auth-btn ghost" id="signUp" type="button">Sign Up</button>
-            </div>
-          </div>
-        </div>
+  <!-- ───── NAVBAR ───── -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">🍽</span>
+      <span class="brand-name">Flavour</span>
+    </div>
+    <div class="nav-right">
+      <div id="auth-buttons" class="nav-auth">
+        <button class="btn-ghost" id="nav-login-btn">Login</button>
+        <button class="btn-solid" id="nav-signup-btn">Sign Up</button>
+      </div>
+      <div id="user-info" class="user-info hidden">
+        <div class="avatar" id="user-avatar">A</div>
+        <span id="user-greeting" class="greeting"></span>
+        <button class="btn-logout" id="logout-btn">Logout</button>
       </div>
     </div>
+  </nav>
 
-    <!-- Main App Content (Hidden when not logged in) -->
-    <div id="app-content" class="d-none">
-      <div class="container my-3 text-center">
-        <!-- BOOTSTAP(WEBSITE) >> BUTTON >> OUTLINE BUTTON -->
-         <!-- TO SELECT MULTIPLE LINE TO CHANGE OR WRITE SOMETHING IN IT USE ALT+ENTER BUTTON -->
-          <!-- ID SHOULD BE UNIQUE  -->
-      <button id="indian" type="button" class="btn btn-outline-primary mx-3">Indian</button> 
-      <button id="canadian" type="button" class="btn btn-outline-warning mx-3">Canadian</button>
-      <button id="american" type="button" class="btn btn-outline-success mx-3">American</button>
-      <button id="thai" type="button" class="btn btn-outline-info mx-3">Thai</button>
-      <button id="british" type="button" class="btn btn-outline-warning mx-3">British</button>
-      <button id="russian" type="button" class="btn btn-outline-info mx-3">Russian</button>
-    </div>
-      <!-- TO CREATE SEARCH BAR -->
-    <div class="container text-center">
-        <input type="text" id="search" title="search" placeholder="type food here..">
-    </div>
+  <!-- ───── AUTH MODAL OVERLAY ───── -->
+  <div id="auth-overlay" class="auth-overlay hidden" onclick="closeAuthOnOverlay(event)">
+    <div class="auth-modal" id="auth-modal">
 
-    <div class="food">
+      <!-- Close Button -->
+      <button class="modal-close" onclick="closeAuth()">✕</button>
 
+      <!-- LEFT PANEL -->
+      <div class="auth-left" id="auth-left">
+        <div class="auth-left-content">
+          <div class="auth-logo">🍽</div>
+          <h2 class="auth-left-title" id="auth-left-title">Welcome Back!</h2>
+          <p class="auth-left-sub" id="auth-left-sub">Sign in to discover and save your favourite recipes from around the world.</p>
+          <button class="auth-switch-btn" id="auth-switch-btn" onclick="toggleAuthMode()">
+            <span id="switch-label">Create Account →</span>
+          </button>
+        </div>
+        <div class="auth-left-deco"></div>
+      </div>
+
+      <!-- RIGHT PANEL — FORMS -->
+      <div class="auth-right">
+
+        <!-- LOGIN FORM -->
+        <div class="auth-form-wrap" id="login-wrap">
+          <h1 class="form-title">Sign In</h1>
+          <p class="form-sub">Access your recipe collection</p>
+          <form id="login-form" autocomplete="off">
+            <div class="field-group">
+              <label>Email Address</label>
+              <input type="email" id="login-email" placeholder="you@example.com" required/>
+            </div>
+            <div class="field-group">
+              <label>Password</label>
+              <input type="password" id="login-password" placeholder="••••••••" required/>
+            </div>
+            <div class="form-error hidden" id="login-error"></div>
+            <button type="submit" class="form-submit">Sign In</button>
+          </form>
+          <p class="form-footer">No account? <span class="form-link" onclick="toggleAuthMode()">Create one free</span></p>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div class="auth-form-wrap hidden" id="signup-wrap">
+          <h1 class="form-title">Create Account</h1>
+          <p class="form-sub">Join thousands of food lovers</p>
+          <form id="signup-form" autocomplete="off">
+            <div class="field-group">
+              <label>Full Name</label>
+              <input type="text" id="signup-name" placeholder="Your name" required/>
+            </div>
+            <div class="field-group">
+              <label>Email Address</label>
+              <input type="email" id="signup-email" placeholder="you@example.com" required/>
+            </div>
+            <div class="field-group">
+              <label>Password</label>
+              <input type="password" id="signup-password" placeholder="Min. 6 characters" required/>
+            </div>
+            <div class="form-error hidden" id="signup-error"></div>
+            <button type="submit" class="form-submit">Create Account</button>
+          </form>
+          <p class="form-footer">Already have an account? <span class="form-link" onclick="toggleAuthMode()">Sign in</span></p>
+        </div>
+
+      </div>
     </div>
+  </div>
+
+  <!-- ───── HERO ───── -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Discover · Cook · Savour</p>
+      <h1 class="hero-title">Find Your Next<br/><em>Favourite Meal</em></h1>
+      <p class="hero-sub">Explore thousands of recipes from 6 world cuisines. Search by ingredient, name, or region.</p>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search" placeholder="Search any recipe — press Enter"/>
+      </div>
     </div>
-   <!-- LINK JS FILE  -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./index.js"></script>
-  </body>
+    <div class="hero-deco">
+      <div class="deco-circle c1"></div>
+      <div class="deco-circle c2"></div>
+      <div class="deco-circle c3"></div>
+    </div>
+  </section>
+
+  <!-- ───── CUISINE FILTERS ───── -->
+  <section class="filters-section">
+    <p class="section-label">Browse by Cuisine</p>
+    <div class="filters">
+      <button class="filter-btn active" data-area="indian">🇮🇳 Indian</button>
+      <button class="filter-btn" data-area="canadian">🇨🇦 Canadian</button>
+      <button class="filter-btn" data-area="american">🇺🇸 American</button>
+      <button class="filter-btn" data-area="thai">🇹🇭 Thai</button>
+      <button class="filter-btn" data-area="british">🇬🇧 British</button>
+      <button class="filter-btn" data-area="russian">🇷🇺 Russian</button>
+    </div>
+  </section>
+
+  <!-- ───── RECIPE GRID ───── -->
+  <section class="recipes-section">
+    <div class="recipes-header">
+      <h2 class="recipes-title" id="recipes-title">Indian Cuisine</h2>
+      <span class="recipes-count" id="recipes-count"></span>
+    </div>
+    <div class="food-grid" id="food-grid">
+      <!-- Skeleton loaders -->
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+  </section>
+
+  <!-- ───── TOAST ───── -->
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- ───── FOOTER ───── -->
+  <footer class="footer">
+    <p>🍽 <strong>Flavour</strong> — Built with HTML · CSS · JS · <a href="https://www.themealdb.com" target="_blank">TheMealDB API</a></p>
+  </footer>
+
+  <script src="index.js"></script>
+</body>
 </html>
